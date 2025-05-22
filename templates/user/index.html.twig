@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello {{user.name}}!{% endblock %}
+
+{% block body %}
+  <div class="container my-4">
+    <h1>Bonjour {{user.name}}</h1>
+    <h1 class="text-center">Espace Utilisateur</h1>
+
+    <!-- Barre de recherche (optionnel) -->
+    {{ form_start(searchForm) }}
+      <div class="row g-3 my-4">
+        <div class="col-md-5">
+          {{ form_row(searchForm.brand) }}
+        </div>
+        <div class="col-md-5">
+          {{ form_row(searchForm.model) }}
+        </div>
+        <div class="col-md-2">
+          {{ form_row(searchForm.search) }}
+        </div>
+      </div>
+    {{ form_end(searchForm) }}
+
+    <!-- Liste des véhicules disponibles -->
+    <h3>Véhicules disponibles</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for car in cars %}
+            {% if car.available %}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="{{ asset('uploads/images/voitures/' ~ car.photo) }}" class="card-img-top" alt="Voiture">
+                        <div class="card-body">
+                            <h5 class="card-title">{{car.brand}}</h5>
+                            <p class="card-text">{{car.model}}</p>
+                            <p class="card-text">{{car.price}} €</p>
+                            <a 
+                              href="{{
+                                      path('app_car', {'id':car.id}
+                              )}}"
+                              class="btn btn-primary btn-sm"
+                            >
+                              Réserver
+                            </a>
+                            <a 
+                              href="{{
+                                      path('app_car', {'id':car.id}
+                              )}}"  
+                              class="btn btn-outline-secondary btn-sm"
+                            >
+                                Détails
+                            </a>
+                            <a href="#" class="btn btn-outline-danger btn-sm">Like {{car.likes}}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+      <!-- Duplique ce bloc <div class="col"> pour chaque voiture -->
+    </div>
+
+    <!-- Réservations de l'utilisateur -->
+    <h3 class="mt-5">Mes Réservations</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Véhicule</th>
+          <th>Modéle</th>
+          <th>Date début</th>
+          <th>Date fin</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reservation in user.reservations %}
+          <tr>
+            <td>{{reservation.car.brand}}</td>
+            <td>{{reservation.car.model}}</td>
+            <td>{{reservation.reservedFrom|date('d-m-Y')}}</td>
+            <td>{{reservation.reservedTo|date('d-m-Y')}}</td>
+            <td>Confirmée</td>
+          </tr>
+        {% endfor %}
+        <!-- Ajouter d'autres réservations ici -->
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

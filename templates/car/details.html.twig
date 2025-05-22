@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello {{user.name}}!{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+
+    <!-- Haut de page : Retour et Disponibilité -->
+    <div class="d-flex justify-content-between mb-4">
+        <a 
+            href="{{path('app_account')}}"  
+            class="btn btn-secondary"
+        >
+            ← Retour
+        </a>
+        <div>
+            {% if car.available %}
+              <span class="badge bg-success me-2">Disponible</span>
+            {% else %}
+              <span class="badge bg-danger me-2">Indisponible</span>
+            {% endif %}
+            <button class="btn btn-outline-danger">❤️ Like</button>
+        </div>
+    </div>
+
+    <!-- Section principale -->
+    <div class="row">
+      <!-- Image véhicule -->
+      <div class="col-md-6">
+        <img src="{{ asset('uploads/images/voitures/' ~ car.photo) }}" class="img-fluid rounded" alt="Peugeot 208">
+      </div>
+
+      <!-- Détails + Réservation -->
+      <div class="col-md-6">
+        <h2>{{car.brand}}</h2>
+        <ul class="list-group list-group-flush mb-4">
+          <li class="list-group-item"><strong>Modéle :</strong> {{car.model}}</li>
+          <li class="list-group-item"><strong>Année:</strong> {{car.year}}</li>
+          <li class="list-group-item"><strong>Prix / jour :</strong> {{car.price}} €</li>
+          <li class="list-group-item">{{car.description}}</li>
+        </ul>
+        <!-- Formulaire de réservation -->
+        <h5>Réserver ce véhicule</h5>
+        {% if car.available %}
+          <div class="col-md-4 mx-auto">
+              {{form(form)}}
+          </div>
+        {% else %}
+           <span class="badge bg-danger me-2">Indisponible</span>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
